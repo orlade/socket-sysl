@@ -1,0 +1,33 @@
+ExampleService:
+    # Events can be thought of as analogous to:
+    #  - Requests: things clients do to the server (e.g. "connect"), or
+    #  - Responses: things the server has produced (e.g. "motd").
+    #
+    # Events are defined on the service, since they comprise its API.
+    # Clients defined in other files would uses the same events to communicate.
+
+    # Inbound:
+
+    # Client establishes a connection to the server.
+    <-> Connect: ...
+
+    # Outbound:
+
+    # Server sends a message of the day to a client.
+    <-> MOTD: ...
+
+    # Event handlers are subscribers to inbound events. They will typically
+    # perform some processing and fire an outbound event.
+
+    # Handles the connection of a client.
+    ExampleService -> Connect:
+        . <- MOTD
+
+ExampleClient:
+    # Events defined on the client are client-side events, such as page load
+    # lifecycle events and user interactions.
+    <-> Start: ...
+
+    # Render MOTDs from the server.
+    ExampleService -> MOTD:
+        render
