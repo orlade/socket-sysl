@@ -1,0 +1,11 @@
+\(:model, ...) $`
+	package server
+
+	import (
+		github.com/orlade/socket-sysl
+	)
+
+	function ListenAndServe(host string, port int) {
+		internal.ListenAndServe("localhost", 3001)
+	}
+`

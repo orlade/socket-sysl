@@ -1,0 +1,17 @@
+\(:model, :appName, ...)
+    let subEps = model.endpoints where .isSub;
+    let package = //str.lower(//seq.join('', appName));
+    $`
+        package ${package}
+
+        import (
+            "context"
+        )
+
+        // Service is the interface for ${appName::} clients.
+        type Service interface {
+            ${subEps where .appName = appName => $`
+                On${//seq. sub(' -> ', '', .epName)}(ctx context.Context) error
+            ` orderby .::\i}
+        }
+    `

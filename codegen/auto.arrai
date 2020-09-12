@@ -1,0 +1,25 @@
+# Generates code for a socket-sysl app and/or service.
+
+let sysl = //{./../../sysl/pkg/arrai/sysl};
+let raw = sysl.load('model.pb');
+let model = sysl.normalize(raw);
+let args = (:model);
+
+# Endpoints with event subscriptions.
+let subEps = model.endpoints where .isSub;
+
+let out = {
+    'gen': (subEps => .appName => \appName
+        let args = args +> (:appName);
+        (
+            @: $`${appName::}`,
+            @value: {
+                'app.go': //{./app.go.arrai}(args),
+                'service.go': //{./service.go.arrai}(args),
+                'serviceinterface.go': //{./serviceinterface.go.arrai}(args),
+            }
+        )
+    ),
+};
+
+out
