@@ -1,10 +1,10 @@
 package exampleservice
 
 import (
-    "context"
+	"context"
 )
 
 // Service is the interface for ExampleService clients.
 type Service interface {
-    OnExampleServiceConnect(ctx context.Context) error
+	OnExampleServiceConnect(ctx context.Context) error
 }

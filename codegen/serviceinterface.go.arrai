@@ -1,5 +1,5 @@
 \(:model, :appName, ...)
-    let subEps = model.endpoints where .isSub;
+    let subEps = model.endpoints where .isSub && .appName = appName;
     let package = //str.lower(//seq.join('', appName));
     $`
         package ${package}
@@ -11,8 +11,19 @@
         // ServiceInterface for ${appName::}.
         // Implementations of these methods must be provided.
         type ServiceInterface struct {
-            ${subEps where .appName = appName => $`
-                On${//seq. sub(' -> ', '', .epName)} func(ctx context.Context) error
-            ` orderby .::\i}
+            ${(subEps =>
+                let pubs = (model.calls <-- {.} where .isPub) => .to;
+                let pubName = \pub
+                    $`emit${cond {pub.appName != appName: appName}::}${pub.eventName}`;
+                $`
+                    On${//seq. sub(' -> ', '', .epName)} func(ctx context.Context${
+                        cond pubs {
+                            {}: '',
+                            _: $`${pubs => $`, ${pubName(.)} func(args ...interface{})` orderby .::}`,
+                        }
+                    }) error
+                `
+            ) orderby .::\i}
+
         }
     `

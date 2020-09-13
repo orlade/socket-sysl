@@ -1,5 +1,5 @@
 \(:model, :appName, ...)
-    let subEps = model.endpoints where .isSub;
+    let subEps = model.endpoints where .isSub && .appName = appName;
     let package = //str.lower(//seq.join('', appName));
     $`
 package ${package}
@@ -37,11 +37,19 @@ func Serve(
             ss.On("connection", func(so socketio.Socket) {
                 log.Println("user connected")
 
-                ${subEps where .appName = appName => $`
+                ${(subEps => 
+                    let pubs = (model.calls <-- {.} where .isPub) => .to;
+                    $`
                     _ = so.On("${.eventName}", func(msg map[string]interface{}) {
-                        _ = svc.On${//seq. sub(' -> ', '', .epName)}(ctx)
+                        _ = svc.On${//seq. sub(' -> ', '', .epName)}(ctx${
+                            cond {pubs: $`${pubs => $`
+                                , func(args ...interface{}) {
+                                    so.Emit("${.eventName}", args...)
+                                }` orderby .::}`
+                            }
+                        })
                     })
-                ` orderby .::\i}
+                `) orderby .::\i}
             })
 
             ss.On("error", func(so socketio.Socket, err error) {
