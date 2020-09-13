@@ -1,0 +1,31 @@
+\(:model, :appName, ...)
+    let subEps = model.endpoints where .isSub && .appName = appName;
+    let pubs = model.calls where .from.appName = appName && .isPub;
+    $`
+<head>
+    <script>
+        localStorage.debug = 'socket.io-client:socket';
+        userId = 'user' + Math.floor(Math.random() * 1000000);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+</head>
+<body>
+<h1>${appName::}</h1>
+<div>
+    <ul>
+        ${subEps => $`<li>
+            <p>${.epName}</p>
+            <ul id="${.eventName}"></ul>
+        </li>` orderby .::\n}
+    </ul>
+    <ul>
+        ${pubs => $`<li>
+            <p>${.from.epName}</p>
+            <textarea id="${.to.eventName}_input"></textarea>
+            <button onclick="emit${.to.eventName}()">Emit ${.to.eventName}</button>
+        </li>` orderby .::\n}
+    </ul>
+</div>
+<script src="./app.js"></script>
+</body>
+`

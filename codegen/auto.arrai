@@ -6,21 +6,28 @@ let model = sysl.normalize(raw);
 let args = (:model);
 
 # Endpoints with event subscriptions.
-let subEps = model.endpoints where .isSub;
+let subApps = (model.endpoints where .isSub nest ~|appName|subEps) <&> model.apps;
 
 let out = {
-    'gen': (subEps => .appName => \appName
+    'gen': subApps => \(:appName, :appPatterns, :subEps, ...)
         let args = args +> (:appName);
         (
             @: $`${appName::}`,
-            @value: {
-                'app.go': //{./app.go.arrai}(args),
-                'service.go': //{./service.go.arrai}(args),
-                'serviceinterface.go': //{./serviceinterface.go.arrai}(args),
+            @value: cond {
+                {'web', 'client'} (<=) appPatterns: {
+                    'index.html': //{./web/index.html.arrai}(args),
+                    'app.js': //{./web/app.js.arrai}(args),
+                },
+                _: {
+                    'app.go': //{./go/app.go.arrai}(args),
+                    'service.go': //{./go/service.go.arrai}(args),
+                    'serviceinterface.go': //{./go/serviceinterface.go.arrai}(args),
+                }
             }
         )
-    ),
+    ,
 };
 
+# subApps
 out
 # //fmt.pretty(model)

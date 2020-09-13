@@ -12,14 +12,15 @@
         // Implementations of these methods must be provided.
         type ServiceInterface struct {
             ${(subEps =>
-                let pubs = (model.calls <-- {.} where .isPub) => .to;
+                let pubs = model.calls <&> {. +> (from: (:.appName, :.epName))} where .isPub;
                 let pubName = \pub
-                    $`emit${cond {pub.appName != appName: appName}::}${pub.eventName}`;
+                    $`${cond {'relay' <: .epPatterns: 'relay', _: 'emit'}}${
+                        cond {pub.appName != appName: appName}::}${pub.eventName}`;
                 $`
-                    On${//seq. sub(' -> ', '', .epName)} func(ctx context.Context${
+                    On${//seq. sub(' -> ', '', .epName)} func(ctx context.Context, msg map[string]interface{}${
                         cond pubs {
                             {}: '',
-                            _: $`${pubs => $`, ${pubName(.)} func(args ...interface{})` orderby .::}`,
+                            _: $`${pubs => $`, ${pubName(.to)} func(args ...interface{})` orderby .::}`,
                         }
                     }) error
                 `

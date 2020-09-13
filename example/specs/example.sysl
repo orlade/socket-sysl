@@ -1,4 +1,5 @@
-ExampleService:
+# An example chat app.
+ChatService:
     # Events can be thought of as analogous to:
     #  - Requests: things clients do to the server (e.g. "connect"), or
     #  - Responses: things the server has produced (e.g. "motd").
@@ -11,6 +12,7 @@ ExampleService:
     # Client establishes a connection to the server.
     <-> Connect: ...
 
+
     # Outbound:
 
     # Server sends a message of the day to a client.
@@ -20,14 +22,30 @@ ExampleService:
     # perform some processing and fire an outbound event.
 
     # Handles the connection of a client.
-    ExampleService -> Connect:
+    ChatService -> Connect:
         . <- MOTD
 
-ExampleClient:
+    # Relay a client message to all other subscribers.
+    ChatClient -> SendMessage[~relay]:
+        ChatClient <- SendMessage
+
+
+ChatClient[~web, ~client]:
     # Events defined on the client are client-side events, such as page load
     # lifecycle events and user interactions.
     <-> Start: ...
 
+    # Client sends a chat message.
+    <-> SendMessage: ...
+
     # Render MOTDs from the server.
-    ExampleService -> MOTD:
+    ChatService -> MOTD:
+        render
+    
+    # User sends a message.
+    Send:
+        . <- SendMessage
+    
+    # Render all messages that are sent.
+    ChatClient -> SendMessage:
         render

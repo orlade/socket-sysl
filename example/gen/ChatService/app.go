@@ -1,4 +1,4 @@
-package exampleservice
+package chatservice
 
 import (
 	"context"
@@ -35,8 +35,14 @@ func Serve(
 				log.Println("user connected")
 
 				_ = so.On("Connect", func(msg map[string]interface{}) {
-					_ = svc.OnExampleServiceConnect(ctx, func(args ...interface{}) {
+					_ = svc.OnChatServiceConnect(ctx, msg, func(args ...interface{}) {
 						so.Emit("MOTD", args...)
+					})
+				})
+				so.Join("SendMessage")
+				_ = so.On("SendMessage", func(msg map[string]interface{}) {
+					_ = svc.OnChatClientSendMessage(ctx, msg, func(args ...interface{}) {
+						ss.BroadcastTo("SendMessage", "SendMessage", args...)
 					})
 				})
 			})

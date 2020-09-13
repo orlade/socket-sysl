@@ -38,13 +38,18 @@ func Serve(
                 log.Println("user connected")
 
                 ${(subEps => 
-                    let pubs = (model.calls <-- {.} where .isPub) => .to;
+                    let relay = 'relay' <: .epPatterns;
+                    let pubs = model.calls <&> {. +> (from: (:.appName, :.epName))} where .isPub;
                     $`
+                    ${cond {relay: $`so.Join("${.eventName}")`}}
                     _ = so.On("${.eventName}", func(msg map[string]interface{}) {
-                        _ = svc.On${//seq. sub(' -> ', '', .epName)}(ctx${
-                            cond {pubs: $`${pubs => $`
-                                , func(args ...interface{}) {
-                                    so.Emit("${.eventName}", args...)
+                        _ = svc.On${//seq. sub(' -> ', '', .epName)}(ctx, msg${
+                            cond {
+                                relay: $`, func(args ...interface{}) {
+                                    ss.BroadcastTo("${.eventName}", "${.eventName}", args...)
+                                }`,
+                                pubs: $`${pubs => $`, func(args ...interface{}) {
+                                    so.Emit("${.to.eventName}", args...)
                                 }` orderby .::}`
                             }
                         })
