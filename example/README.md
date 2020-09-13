@@ -32,8 +32,9 @@ import (
 )
 
 func main() {
-	// Serve the generated client code from the base path.
-	http.Handle("/", http.FileServer(http.Dir("gen/ChatClient")))
+	// Serve the generated client code from /gen, allowing custom client code to import it.
+	http.Handle("/", http.FileServer(http.Dir("web")))
+	http.Handle("/gen/", http.StripPrefix("/gen", http.FileServer(http.Dir("gen/ChatClient/"))))
 
 	// Listen and serve the WebSockets API.
 	log.Fatal(chatservice.Serve(

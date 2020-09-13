@@ -9,7 +9,8 @@ import (
 )
 
 func main() {
-	http.Handle("/", http.FileServer(http.Dir("gen/ChatClient")))
+	http.Handle("/", http.FileServer(http.Dir("web")))
+	http.Handle("/gen/", http.StripPrefix("/gen", http.FileServer(http.Dir("gen/ChatClient/"))))
 
 	log.Fatal(chatservice.Serve(
 		context.Background(),
