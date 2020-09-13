@@ -3,11 +3,14 @@ package main
 import (
 	"context"
 	"log"
+	"net/http"
 
 	chatservice "github.com/orlade/socket-sysl/example/gen/ChatService"
 )
 
 func main() {
+	http.Handle("/", http.FileServer(http.Dir("gen/ChatClient")))
+
 	log.Fatal(chatservice.Serve(
 		context.Background(),
 		func(ctx context.Context, config interface{}) (*chatservice.ServiceInterface, error) {

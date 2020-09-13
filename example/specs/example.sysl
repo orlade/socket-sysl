@@ -29,6 +29,10 @@ ChatService:
     ChatClient -> SendMessage[~relay]:
         ChatClient <- SendMessage
 
+    # Serve the chat client web app.
+    /:
+        GET:
+            serve ChatClient
 
 ChatClient[~web, ~client]:
     # Events defined on the client are client-side events, such as page load

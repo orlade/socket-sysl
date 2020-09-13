@@ -1,7 +1,15 @@
-Ÿ
-ChatService
+¢
+ChatService’
 
-ChatService*|
+ChatService*€
+GET /w
+GET /"
+patterns
+:
+"rest:
+serve ChatClientB/š8
+*dev/socket-sysl/example/specs/example.sysl"%
+*|
 Connectq
 Connect0:)'
 
@@ -28,8 +36,7 @@ ChatClient:
 
 
 ChatClientSendMessageš8
-*dev/socket-sysl/example/specs/example.sysl!
-š6
+*dev/socket-sysl/example/specs/example.sysl!š6
 *dev/socket-sysl/example/specs/example.syslÀ
 
 ChatClient±
@@ -48,24 +55,24 @@ ChatClient"
 ChatClientChatClient -> SendMessage*M
 StartD
 Start0š8
-*dev/socket-sysl/example/specs/example.sysl$$*‚
+*dev/socket-sysl/example/specs/example.sysl((*‚
 ChatService -> MOTDk
 ChatService -> MOTD*
 ChatService:
 
 renderš8
-*dev/socket-sysl/example/specs/example.sysl*.*h
+*dev/socket-sysl/example/specs/example.sysl.2*h
 Send`
 Send:
 
 
 ChatClientSendMessageš8
-*dev/socket-sysl/example/specs/example.sysl.2*‹
+*dev/socket-sysl/example/specs/example.sysl26*‹
 ChatClient -> SendMessagen
 ChatClient -> SendMessage*
 
 ChatClient:
 
 renderš6
-*dev/socket-sysl/example/specs/example.sysl24š8
-*dev/socket-sysl/example/specs/example.sysl!!
+*dev/socket-sysl/example/specs/example.sysl68š8
+*dev/socket-sysl/example/specs/example.sysl%%
