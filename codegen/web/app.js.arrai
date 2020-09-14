@@ -1,22 +1,10 @@
-\(:model, :appName, ...)
-    let subEps = model.endpoints where .isSub && .appName = appName;
-    let pubs = model.calls where .from.appName = appName && .isPub;
+\(:model, :appName, config: (:host, :port), ...)
     $`
 // ${appName::}
 
-socket = io('http://localhost:3001');
-setTimeout(() => socket.emit('Connect'), 100)
-
-${subEps => $`socket.on('${.eventName}', msg => {
-    const li = document.createElement('li');
-    li.innerText = JSON.stringify(msg, null, 2);
-    document.getElementById('${.eventName}').append(li);
-})` orderby .::\i}
-
-${pubs => $`
-    function emit${.to.eventName}() {
-        const input = document.getElementById('${.to.eventName}_input').value;
-        socket.emit('${.to.eventName}', {userId, input}) 
-    }
-` orderby .::\i}
+window.gen = window.gen || {};
+window.gen.app = {
+    name: '${appName::}',
+    userId: 'user' + Math.floor(Math.random() * 1000000),
+};
 `

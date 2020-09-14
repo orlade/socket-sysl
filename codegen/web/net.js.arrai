@@ -1,0 +1,24 @@
+\(:model, :appName, config: (:host, :port), ...)
+    let subEps = model.endpoints where .isSub && .appName = appName;
+    let pubs = model.calls where .from.appName = appName && .isPub;
+    $`
+// ${appName::} Networking
+
+socket = io('http://${host}:${port}');
+setTimeout(() => socket.emit('Connect'), 100)
+
+window.gen = window.gen || {};
+window.gen.net = {};
+
+${subEps => $`
+    window.gen.net.on${.eventName} = function on${.eventName}(callback) {
+        socket.on('${.eventName}', callback)
+    }
+` orderby .::\i\n}
+
+${pubs => $`
+    window.gen.net.emit${.to.eventName} = function emit${.to.eventName}(input) {
+        socket.emit('${.to.eventName}', {userId, input, timestamp: Date.now()}) 
+    }
+` orderby .::\i\n}
+`

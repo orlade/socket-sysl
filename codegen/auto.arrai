@@ -3,7 +3,8 @@
 let sysl = //{./../../sysl/pkg/arrai/sysl};
 let raw = sysl.load('model.pb');
 let model = sysl.normalize(raw);
-let args = (:model);
+let config = (host: 'localhost', port: 3001);
+let args = (:model, :config);
 
 # Endpoints with event subscriptions.
 let subApps = (model.endpoints where .isSub nest ~|appName|subEps) <&> model.apps;
@@ -17,6 +18,8 @@ let out = {
                 {'web', 'client'} (<=) appPatterns: {
                     'index.html': //{./web/index.html.arrai}(args),
                     'app.js': //{./web/app.js.arrai}(args),
+                    'net.js': //{./web/net.js.arrai}(args),
+                    'ui.js': //{./web/ui.js.arrai}(args),
                 },
                 _: {
                     'app.go': //{./go/app.go.arrai}(args),

@@ -1,11 +1,12 @@
 <head>
-    <script>
-        localStorage.debug = 'socket.io-client:socket';
-        userId = 'user' + Math.floor(Math.random() * 1000000);
-    </script>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+    <script src="gen/app.js"></script>
+    <script src="gen/net.js"></script>
+    <script src="gen/ui.js"></script>
 </head>
 <body>
-<h1>ChatClient</h1>
-<script src="gen/app.js"></script>
+<div id="root"></div>
+<script src="ui.js"></script>
 </body>
