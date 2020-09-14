@@ -1,3 +1,5 @@
+document.title = window.gen.app.name;
+
 window.onload = function () {
     function App() {
         return React.createElement('div', null,

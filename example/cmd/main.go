@@ -17,12 +17,12 @@ func main() {
 		func(ctx context.Context, config interface{}) (*chatservice.ServiceInterface, error) {
 			return &chatservice.ServiceInterface{
 				OnChatServiceConnect: func(ctx context.Context, msg map[string]interface{}, emitMOTD func(args ...interface{})) error {
-					log.Println("OnExampleServiceConnect")
+					log.Println("OnExampleServiceConnect", msg)
 					emitMOTD("hello!")
 					return nil
 				},
 				OnChatClientSendMessage: func(ctx context.Context, msg map[string]interface{}, relayChatServiceSendMessage func(args ...interface{})) error {
-					log.Println("OnChatClientSendMessage")
+					log.Println("OnChatClientSendMessage", msg)
 					relayChatServiceSendMessage(msg)
 					return nil
 				},
