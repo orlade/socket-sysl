@@ -7,8 +7,18 @@ let raw = cond {
         let sd = //encoding.proto.descriptor(//os.file('sysl.pb'));
         //encoding.proto.decode(sd, 'Module' , //os.stdin),
 };
-let _ = //log.print(raw);
+
+# Parse command line args as configuration.
+let appNames = //os.args(1)?:{};
+
 let model = sysl.normalize(raw);
+let model = cond appNames {
+    {}: model,
+    _: 
+        let include = //seq.split(',', appNames) => //seq.split('::', .@item);
+        model +> (apps: model.apps where .appName <: include),
+};
+
 let config = (host: 'localhost', port: 3001);
 let args = (:model, :config);
 
