@@ -1,7 +1,7 @@
 # Generates code for a socket-sysl app and/or service.
 
-let sysl = //{./../../sysl/pkg/arrai/sysl};
-let raw = sysl.load('model.pb');
+let sysl = //{github.com/anz-bank/sysl/pkg/arrai/sysl.arrai};
+let raw = cond {//os.isatty(0): sysl.load('model.pb'), _: //os.stdin};
 let model = sysl.normalize(raw);
 let config = (host: 'localhost', port: 3001);
 let args = (:model, :config);
