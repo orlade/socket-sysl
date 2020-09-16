@@ -1,0 +1,30 @@
+let type = \t
+    let ptr = cond {t.opt?:{}: "*"};
+    # let appname = cond t {
+    #     {'typeRef': {'ref': {'appname': {'part': (a: [(s: appname), ...])}, ...}, ...}, ...}: appname,
+    #     _: "",
+    # };
+    let typeName = cond t.fieldType {
+        (:sequence, ...): $`[]${sequence}`,
+        (:set, ...): $`${set}Set`,
+        (:one_of, ...): $`interface{}`,
+        'DECIMAL' : `float64`,
+        'INT'     : `int64`,
+        'FLOAT'   : `float64`,
+        'STRING'  : `string`,
+        'STRING_8': `string`,
+        'BOOL'    : `bool`,
+        'BYTES'   : `[]byte`,
+        'DATE'    : `date.Date`,
+        'DATETIME': cond t.fieldAnnotations {
+            ('time_format': 'stdtime'): `time.Time`,
+            _: `convert.JSONTime`,
+        },
+        x: x,
+    };
+    ptr ++ typeName
+;
+
+(
+    :type,
+)

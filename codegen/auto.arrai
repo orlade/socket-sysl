@@ -41,6 +41,7 @@ let out = {
                     'app.go': //{./go/app.go.arrai}(args),
                     'service.go': //{./go/service.go.arrai}(args),
                     'serviceinterface.go': //{./go/serviceinterface.go.arrai}(args),
+                    'types.go': //{./go/types.go.arrai}(args),
                 }
             }
         )
@@ -48,3 +49,4 @@ let out = {
 };
 
 out
+# //fmt.pretty(out)
